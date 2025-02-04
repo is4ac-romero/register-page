@@ -17,13 +17,23 @@
                 header("Location: ./index.php?sign=empty-password&username=$username&email=$email");
             } else if($password != $confirmPassword) { //check the password
                 header("Location: ./index.php?sign=passwords-doesnt-match&username=$username&email=$email");
-            } else { //make a hash for a while
-                $hash = password_hash($password, PASSWORD_DEFAULT);
-                echo $hash;
+            } else { 
+                try {
+                    require "includes/db-connection.php"; //start the database connection
+                    $hash = password_hash($password, PASSWORD_DEFAULT); //create a hash for security reasons
+                    
+                    //prepare and insert into table users 
+                    $stmt = $db->prepare("INSERT INTO users (username, email, pass) VALUES (:username, :email, :pass)");
+                    $stmt -> bindParam(":username", $username); 
+                    $stmt -> bindParam(":email", $email);
+                    $stmt -> bindParam(":pass", $hash);
+                    $stmt->execute();
+                } catch(Exception $e) {
+                    echo $e->getMessage();
+                }
             }
             exit();
         } catch(Exception $e) {
             echo $e->getMessage();
         }
     }
-

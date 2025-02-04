@@ -60,10 +60,6 @@
                 ";
             }
         ?>
-
-        <!-- <input name='password' type='text' placeholder='Password'> <br> -->
-        <!-- <input name='confirm-password' type='text' placeholder='Confirm Password'> <br> -->
-
         <button type="submit">Register</button>
     </form>
 </body>
