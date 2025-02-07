@@ -20,14 +20,26 @@
             } else { 
                 try {
                     require "includes/db-connection.php"; //start the database connection
-                    $hash = password_hash($password, PASSWORD_DEFAULT); //create a hash for security reasons
                     
-                    //prepare and insert into table users 
-                    $stmt = $db->prepare("INSERT INTO users (username, email, pass) VALUES (:username, :email, :pass)");
-                    $stmt -> bindParam(":username", $username); 
-                    $stmt -> bindParam(":email", $email);
-                    $stmt -> bindParam(":pass", $hash);
+                    //prepare the query for verify if the email is already registered
+                    $stmt = $db->prepare("SELECT * FROM users WHERE email = :email");
+                    $stmt->bindParam(":email", $email);
                     $stmt->execute();
+                    $result = $stmt->rowCount(); //get the quantity of rows returned 
+
+                    if($result) { //if it returns one or more rows, the user cannot register with the email
+                        header("Location: ./index.php?sign=email-already-registered&username=$username"); //redirect saving only the number
+                    } else {
+                        $hash = password_hash($password, PASSWORD_DEFAULT); //create a hash for security reasons
+
+                        //prepare and insert into table users 
+                        $stmt = $db->prepare("INSERT INTO users (username, email, pass) VALUES (:username, :email, :pass)");
+                        $stmt -> bindParam(":username", $username); 
+                        $stmt -> bindParam(":email", $email);
+                        $stmt -> bindParam(":pass", $hash);
+                        $stmt->execute();
+                    }
+
                 } catch(Exception $e) {
                     echo $e->getMessage();
                 }

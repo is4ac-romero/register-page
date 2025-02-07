@@ -20,14 +20,16 @@
                 echo "fill the password!<br>";
             } else if($_GET["sign"] == "passwords-doesnt-match") {
                 echo "passwords dont match!<br>";
+            } else if($_GET["sign"] == "email-already-registered") {
+                echo "email already in use<br>";
             }
         ?>
 
         <?php
             if(!isset($_GET["sign"])) { //if does not have any errors
                 echo "<input name='username' type='text' placeholder='Username'> <br>";
-                //i used a cheat below, ill organize it later ;)
-            } else if($_GET["sign"] == "empty-email" || $_GET["sign"] == "empty-password" || $_GET["sign"] == "passwords-doesnt-match") { //if it has error of empty email
+                //i used a cheat below, ill organize it later ;) i need to organize it hahaha
+            } else if($_GET["sign"] == "empty-email" || $_GET["sign"] == "empty-password" || $_GET["sign"] == "passwords-doesnt-match" || $_GET["sign"] == "email-already-registered") { //if it has error of empty email
                 $username = $_GET["username"]; //fill out the input automaticaly
                 echo "<input name='username' type='text' placeholder='Username' value='$username'> <br>";
             } else { //if it has another error 
