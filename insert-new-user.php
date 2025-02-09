@@ -8,15 +8,15 @@
             $confirmPassword = htmlspecialchars($_POST["confirm-password"]);
 
             if(empty($username) && empty($email) && empty($password) && empty($confirmPassword)) {
-                header("Location: ./index.php?sign=empty");
+                header("Location: ./register-page.php?sign=empty");
             } else if(empty($username)) {
-                header("Location: ./index.php?sign=empty-username&email=$email");
+                header("Location: ./register-page.php?sign=empty-username&email=$email");
             } else if(empty($email)) {
-                header("Location: ./index.php?sign=empty-email&username=$username");
+                header("Location: ./register-page.php?sign=empty-email&username=$username");
             } else if(empty($password) || empty($confirmPassword)) { //until here im testing if some input is empty
-                header("Location: ./index.php?sign=empty-password&username=$username&email=$email");
+                header("Location: ./register-page.php?sign=empty-password&username=$username&email=$email");
             } else if($password != $confirmPassword) { //check the password
-                header("Location: ./index.php?sign=passwords-doesnt-match&username=$username&email=$email");
+                header("Location: ./register-page.php?sign=passwords-doesnt-match&username=$username&email=$email");
             } else { 
                 try {
                     require "includes/db-connection.php"; //start the database connection
@@ -28,7 +28,7 @@
                     $result = $stmt->rowCount(); //get the quantity of rows returned 
 
                     if($result) { //if it returns one or more rows, the user cannot register with the email
-                        header("Location: ./index.php?sign=email-already-registered&username=$username"); //redirect saving only the number
+                        header("Location: ./register-page.php?sign=email-already-registered&username=$username"); //redirect saving only the number
                     } else {
                         $hash = password_hash($password, PASSWORD_DEFAULT); //create a hash for security reasons
 
